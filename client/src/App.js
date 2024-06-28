@@ -4,9 +4,12 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import { GroceryList, Budget, Remaining, TotalSpent, AddNewItem } from "./components";
 
+import { Provider } from "react-redux";
+import { store } from "./states/store";
+
 const App = () => {
     return (
-        <>
+        <Provider store={store}>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid">
                     <h1 className="mt-3">My Groceries</h1>
@@ -42,7 +45,7 @@ const App = () => {
                     {<AddNewItem />}
                 </div>
             </div>
-        </>
+        </Provider>
     );
 };
 
