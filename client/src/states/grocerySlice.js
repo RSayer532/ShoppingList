@@ -2,8 +2,18 @@ import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = {
     budget: 100,
-    remaining: 100,
-    groceryItems: []
+    remaining: 100 - (0.50*2 + 1*5),
+    groceryItems: [
+    {
+        name: "Banana",
+        price: 0.50,
+        quantity: 2
+    },
+    {
+        name:"Apples",
+        price: 1.00,
+        quantity: 5
+    }]
 };
 
 const grocerySlice = createSlice({
@@ -15,15 +25,19 @@ const grocerySlice = createSlice({
             state.groceryItems.push(action.payload);
 
             // Modify the remaining budget
-            let total = state.groceryItems.reduce((total, item) => total + item.price, 0);
+            let total = state.groceryItems.reduce((total, item) => total + (item.price*item.quantity), 0);
             state.remaining = state.budget - total;
         },
 
         removeGrocery(state, action) {
-            // Implement logic
-            return {
-                ...state
-            };
+            
+            // Find grocery item in array and remove
+            let itemIndex = state.groceryItems.indexOf(action.payload);
+            state.groceryItems.splice(itemIndex, 1);
+
+            // Add the total cost of the number of items back to remaining
+            let total = action.payload.price * action.payload.quantity;
+            state.remaining += total;          
         },
 
         increaseQuantity(state, action) {
@@ -41,12 +55,17 @@ const grocerySlice = createSlice({
         },
 
         setBudget(state, action) {
+            // Set budget value
             state.budget = action.payload;
+
+            // Recalculate the remaining value
+            let total = state.groceryItems.reduce((total, item) => total + (item.price*item.quantity), 0);
+            state.remaining = action.payload - total;
         }
     }
 });
 
-export const { addGrocery, setBudget } = grocerySlice.actions;
+export const { addGrocery, setBudget, removeGrocery } = grocerySlice.actions;
 
 export default grocerySlice.reducer;
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const QuantityInput = ({ setQuantity, defaultQuantity }) => {
+const QuantityInput = ({ setQuantity, quantity }) => {
     const quantityList = Array(10)
         .fill()
         .map((_, index) => index + 1);
@@ -11,7 +11,7 @@ const QuantityInput = ({ setQuantity, defaultQuantity }) => {
             id="allocation-input"
             onChange={(event) => setQuantity(event.target.value)}
         >
-            <option defaultValue>1</option>
+            <option defaultValue>{quantity}</option>
             {quantityList.map((quantity) => (
                 <option value={quantity} key={quantity}>
                     {quantity}

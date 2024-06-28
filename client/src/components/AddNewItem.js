@@ -14,6 +14,7 @@ const AddNewItem = () => {
     const [total, setTotal] = useState("0.00");
     const [disableBtn, setDisableBtn] = useState("");
     const [budgetError, setBudgetError] = useState(false);
+    const [nameError, setNameError] = useState(false);
 
     // Global states
     const dispatch = useDispatch();
@@ -50,10 +51,11 @@ const AddNewItem = () => {
     const handleName = (inputName) => {
         //Check if already have item in the list;
         if (currentGroceries.includes(inputName)) {
-            console.log("Already item in the list. Please add to its quantity");
+            setNameError(true);
         } else {
-            setItemName(inputName);
+            setNameError(false);            
         }
+        setItemName(inputName);
     };
 
     // Event handler for item price input
@@ -174,6 +176,11 @@ const AddNewItem = () => {
             {/* Simple popup for testing */}
             <div className={displayPopup(budgetError)}>
                 <p>The total price is greater than the remaning amount</p>
+            </div>
+
+            {/* Simple popup for testing */}
+            <div className={displayPopup(nameError)}>
+                <p>This item is already in the list, add to quantity</p>
             </div>
         </div>
     );

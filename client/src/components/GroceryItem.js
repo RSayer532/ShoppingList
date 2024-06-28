@@ -17,7 +17,7 @@ const GroceryItem = ({ grocery }) => {
                 {`\u00A3`} {totalPrice.toFixed(2)}
             </td>
             <td>
-                <RemoveItem />
+                <RemoveItem grocery={grocery}/>
             </td>
         </tr>
     );
