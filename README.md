@@ -1,2 +1,2 @@
 # ShoppingList
-Shopping list app for grocery items
+Grocery item list, for keeping track of the items you need to buy.
