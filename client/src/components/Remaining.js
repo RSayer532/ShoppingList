@@ -1,6 +1,11 @@
 import React from "react";
+import { selectRemaining } from "../states/grocerySlice";
+import { useSelector } from "react-redux";
 
 const Remaining = () => {
+    // Global states
+    const remaining = useSelector(selectRemaining);
+
     return (
         <div className={`input-group mb-3`}>
             <span className="input-group-text" id="remaining">
@@ -12,7 +17,7 @@ const Remaining = () => {
                 aria-label="Remaining"
                 aria-describedby="remaining"
             >
-                10
+                {remaining}
             </span>
         </div>
     );

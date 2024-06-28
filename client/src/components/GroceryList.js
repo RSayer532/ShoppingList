@@ -23,7 +23,7 @@ const GroceryList = () => {
             </thead>
             <tbody>
                 {groceries.map((grocery) => (
-                    <GroceryItem grocery={grocery} />
+                    <GroceryItem grocery={grocery} key={grocery.name} />
                 ))}
             </tbody>
         </table>

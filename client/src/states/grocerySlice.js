@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = {
-    budget: 0,
-    remaining: 0,
+    budget: 100,
+    remaining: 100,
     groceryItems: []
 };
 
@@ -11,10 +11,12 @@ const grocerySlice = createSlice({
     initialState,
     reducers: {
         addGrocery(state, action) {
-            // Implement logic
-            return {
-                ...state
-            };
+            // Add item to array
+            state.groceryItems.push(action.payload);
+
+            // Modify the remaining budget
+            let total = state.groceryItems.reduce((total, item) => total + item.price, 0);
+            state.remaining = state.budget - total;
         },
 
         removeGrocery(state, action) {
@@ -36,11 +38,15 @@ const grocerySlice = createSlice({
             return {
                 ...state
             };
+        },
+
+        setBudget(state, action) {
+            state.budget = action.payload;
         }
     }
 });
 
-export const { addGrocery } = grocerySlice.actions;
+export const { addGrocery, setBudget } = grocerySlice.actions;
 
 export default grocerySlice.reducer;
 
@@ -48,3 +54,10 @@ export const selectAllGroceries = (state) => state.groceries.groceryItems;
 export const selectBudget = (state) => state.groceries.budget;
 export const selectRemaining = (state) => state.groceries.remaining;
 export const selectSpendingLimit = (state) => state.groceries.spendingLimit;
+
+export const selectExistingItems = createSelector([selectAllGroceries], (items) =>
+    items.map((item) => item.name)
+);
+export const selectExistingTotal = createSelector([selectAllGroceries], (items) =>
+    items.reduce((total, item) => total + item.price, 0)
+);

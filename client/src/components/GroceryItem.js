@@ -6,12 +6,16 @@ const GroceryItem = ({ grocery }) => {
 
     return (
         <tr>
-            <td>{grocery.item}</td>
+            <td>{grocery.name}</td>
             <td>
                 <QuantityInput quantity={grocery.quantity} />
             </td>
-            <td>{grocery.price}</td>
-            <td>{totalPrice}</td>
+            <td>
+                {`\u00A3`} {grocery.price.toFixed(2)}
+            </td>
+            <td>
+                {`\u00A3`} {totalPrice.toFixed(2)}
+            </td>
             <td>
                 <RemoveItem />
             </td>
