@@ -3,7 +3,6 @@ import { setBudget, selectBudget, selectExistingTotal } from "../states/groceryS
 import { useSelector, useDispatch } from "react-redux";
 
 const Budget = () => {
-
     // Global states
     const budget = useSelector(selectBudget);
     const currentTotal = useSelector(selectExistingTotal);
@@ -13,11 +12,10 @@ const Budget = () => {
     const [newBudget, setNewBudget] = useState(budget);
     const [budgetError, setBudgetError] = useState(false);
 
-    const displayPopup = (error) => error ? "visible" : "invisible";
+    const displayPopup = (error) => (error ? "visible" : "invisible");
 
     // Event handler to determine if the input is valid and set the budget
     const handleNewBudget = (budgetString) => {
-
         setNewBudget(budgetString);
 
         // will this cause problems in state mismatch???
@@ -28,7 +26,6 @@ const Budget = () => {
                 setBudgetError(true);
             } else {
                 setBudgetError(false);
-                
             }
 
             // Dispatch budget, even if incorrect, to update the remaining realistically

@@ -7,7 +7,7 @@ const Remaining = () => {
     const remaining = useSelector(selectRemaining);
 
     // Local variable
-    const highlight = (remaining >= 0) ? "" : "bg-warning";
+    const highlight = remaining >= 0 ? "" : "bg-warning";
 
     return (
         <div className={`input-group mb-3`}>

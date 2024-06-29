@@ -1,19 +1,21 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { calculateRemaining } from "../utils/calculations";
 
 const initialState = {
     budget: 100,
-    remaining: 100 - (0.50*2 + 1*5),
+    remaining: 100 - (0.5 * 2 + 1 * 5),
     groceryItems: [
-    {
-        name: "Banana",
-        price: 0.50,
-        quantity: 2
-    },
-    {
-        name:"Apples",
-        price: 1.00,
-        quantity: 5
-    }]
+        {
+            name: "Banana",
+            price: 0.5,
+            quantity: 2
+        },
+        {
+            name: "Apples",
+            price: 1.0,
+            quantity: 5
+        }
+    ]
 };
 
 const grocerySlice = createSlice({
@@ -25,33 +27,32 @@ const grocerySlice = createSlice({
             state.groceryItems.push(action.payload);
 
             // Modify the remaining budget
-            let total = state.groceryItems.reduce((total, item) => total + (item.price*item.quantity), 0);
-            state.remaining = state.budget - total;
+            state.remaining = calculateRemaining(state.budget, state.groceryItems);
         },
 
         removeGrocery(state, action) {
-            
             // Find grocery item in array and remove
-            let itemIndex = state.groceryItems.indexOf(action.payload);
+            let itemIndex = state.groceryItems.findIndex(
+                (item) => item.name === action.payload.name
+            );
             state.groceryItems.splice(itemIndex, 1);
 
             // Add the total cost of the number of items back to remaining
             let total = action.payload.price * action.payload.quantity;
-            state.remaining += total;          
+            state.remaining += total;
         },
 
-        increaseQuantity(state, action) {
-            //Implement logic
-            return {
-                ...state
-            };
-        },
+        modifyQuantity(state, action) {
+            // Get values from action
+            let quantity = action.payload.quantity;
+            let name = action.payload.name;
 
-        decreaseQuantity(state, action) {
-            //Implement logic
-            return {
-                ...state
-            };
+            // Update the item in the grocery array
+            let itemIndex = state.groceryItems.findIndex((item) => item.name === name);
+            state.groceryItems[itemIndex].quantity = quantity;
+
+            // update the remaining value
+            state.remaining = calculateRemaining(state.budget, state.groceryItems);
         },
 
         setBudget(state, action) {
@@ -59,13 +60,12 @@ const grocerySlice = createSlice({
             state.budget = action.payload;
 
             // Recalculate the remaining value
-            let total = state.groceryItems.reduce((total, item) => total + (item.price*item.quantity), 0);
-            state.remaining = action.payload - total;
+            state.remaining = calculateRemaining(state.budget, state.groceryItems);
         }
     }
 });
 
-export const { addGrocery, setBudget, removeGrocery } = grocerySlice.actions;
+export const { addGrocery, setBudget, removeGrocery, modifyQuantity } = grocerySlice.actions;
 
 export default grocerySlice.reducer;
 

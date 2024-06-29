@@ -21,6 +21,15 @@ const AddNewItem = () => {
     const remainingBudget = useSelector(selectRemaining);
     const currentGroceries = useSelector(selectExistingItems);
 
+    // Get class name for popup element to hide or show
+    const displayPopup = (error) => (error ? "visible" : "invisible");
+    const clearInputs = () => {
+        setItemPrice("");
+        setTotal("");
+        setItemName("");
+        setItemQuantity(1);
+    };
+
     useEffect(() => {
         // If no item or price is given, or the total is too large then disable submit button
         if (itemName === "" || itemPrice === "" || budgetError) {
@@ -29,8 +38,6 @@ const AddNewItem = () => {
             setDisableBtn("");
         }
     }, [itemName, itemPrice, budgetError]);
-
-    const displayPopup = (error) => (error ? "visible" : "invisible");
 
     // Event handler for item submission to grocery list
     const submitNewItem = () => {
@@ -43,8 +50,7 @@ const AddNewItem = () => {
         dispatch(addGrocery(newItem));
 
         // Clear inputs
-        setItemPrice("");
-        setTotal("");
+        clearInputs();
     };
 
     // Event handler for item name input
@@ -53,7 +59,7 @@ const AddNewItem = () => {
         if (currentGroceries.includes(inputName)) {
             setNameError(true);
         } else {
-            setNameError(false);            
+            setNameError(false);
         }
         setItemName(inputName);
     };
@@ -116,16 +122,6 @@ const AddNewItem = () => {
                     </div>
                 </div>
 
-                {/* Dropdown to choose quantity of item type */}
-                <div className="col">
-                    <div className="input-group">
-                        <div className="input-group-prepend">
-                            <label className="input-group-text">Quantity</label>
-                        </div>
-                        <QuantityInput setQuantity={handleQuantity} defaultQuantity={1} />
-                    </div>
-                </div>
-
                 {/* Input for price of single item */}
                 <div className="col">
                     <div className="input-group ">
@@ -138,6 +134,20 @@ const AddNewItem = () => {
                             placeholder="0.00"
                             aria-describedby="price-input"
                             onChange={(event) => handlePrice(event.target.value)}
+                        />
+                    </div>
+                </div>
+
+                {/* Dropdown to choose quantity of item type */}
+                <div className="col">
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <label className="input-group-text">Quantity</label>
+                        </div>
+                        <QuantityInput
+                            setQuantity={handleQuantity}
+                            currentQuantity={itemQuantity}
+                            price={itemPrice}
                         />
                     </div>
                 </div>

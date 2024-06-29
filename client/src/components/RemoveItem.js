@@ -1,12 +1,11 @@
 import React from "react";
-import {removeGrocery} from "../states/grocerySlice";
-import {useDispatch} from "react-redux";
+import { removeGrocery } from "../states/grocerySlice";
+import { useDispatch } from "react-redux";
 
 /**
  * Button component to remove item from the list
  */
-const RemoveItem = ({grocery}) => {
-
+const RemoveItem = ({ grocery }) => {
     // Global state
     const dispatch = useDispatch();
 
