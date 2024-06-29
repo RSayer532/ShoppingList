@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { QuantityInput } from ".";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRemaining, addGrocery, selectExistingItems } from "../states/grocerySlice";
+import {displayPopup, toggleDisable} from "./common";
+import {QuantityInput} from ".";
 
 /**
- * Component for adding a new grocery item to the list
+ * Component for adding a new item to the list
  */
 const AddNewItem = () => {
     // Component states
     const [itemName, setItemName] = useState("");
     const [itemPrice, setItemPrice] = useState("");
-    const [itemQuantity, setItemQuantity] = useState(1);
+    const [itemQuantity, setItemQuantity] = useState("");
     const [total, setTotal] = useState("0.00");
-    const [disableBtn, setDisableBtn] = useState("");
+    const [submit, setSubmit] = useState(false);
     const [budgetError, setBudgetError] = useState(false);
     const [nameError, setNameError] = useState(false);
 
     // Global states
     const dispatch = useDispatch();
-    const remainingBudget = useSelector(selectRemaining);
-    const currentGroceries = useSelector(selectExistingItems);
+    const remaining = useSelector(selectRemaining);
+    const itemList = useSelector(selectExistingItems);
 
-    // Get class name for popup element to hide or show
-    const displayPopup = (error) => (error ? "visible" : "invisible");
+    // clear inputs of each element
     const clearInputs = () => {
         setItemPrice("");
         setTotal("");
@@ -32,14 +32,11 @@ const AddNewItem = () => {
 
     useEffect(() => {
         // If no item or price is given, or the total is too large then disable submit button
-        if (itemName === "" || itemPrice === "" || budgetError) {
-            setDisableBtn("disabled");
-        } else {
-            setDisableBtn("");
-        }
+        let condition = itemName === "" || itemPrice === "" || budgetError;
+        toggleDisable(condition, setSubmit);
     }, [itemName, itemPrice, budgetError]);
 
-    // Event handler for item submission to grocery list
+    // Event handler for item submission to current list
     const submitNewItem = () => {
         const newItem = {
             name: itemName,
@@ -56,7 +53,7 @@ const AddNewItem = () => {
     // Event handler for item name input
     const handleName = (inputName) => {
         //Check if already have item in the list;
-        if (currentGroceries.includes(inputName)) {
+        if (itemList.includes(inputName)) {
             setNameError(true);
         } else {
             setNameError(false);
@@ -64,42 +61,33 @@ const AddNewItem = () => {
         setItemName(inputName);
     };
 
-    // Event handler for item price input
-    const handlePrice = (priceValue) => {
+    const handleValue = (value, total, setMethod) => {
         // Break out of function if no price value to prevent NaN error if input empty
         // Number type of HTML element ensures that only digits input
-        if (priceValue === "") {
-            setItemPrice("");
+        if (value === "") {
+            setMethod("");
             setTotal("");
             return;
         }
 
-        let calculatedTotal = parseFloat(priceValue) * itemQuantity;
-
         // Determine if within budget and trigger popup
-        if (calculatedTotal > remainingBudget) {
+        if (total > remaining) {
             setBudgetError(true);
         } else {
             setBudgetError(false);
         }
 
         // Still allow the user to see their input
-        setItemPrice(priceValue);
-        setTotal(String(calculatedTotal));
+        setMethod(value);
+        setTotal(String(total));
     };
 
-    const handleQuantity = (quantityValue) => {
-        // Determine if within budget and trigger alert
-        if (quantityValue * itemPrice > remainingBudget) {
-            setBudgetError(true);
-        } else {
-            setBudgetError(false);
-        }
-        // Ensure that the total does not
-        //is this a number?
-        setItemQuantity(quantityValue);
-        setTotal(quantityValue * itemPrice);
-    };
+    // Event handler for item price input
+    const handlePrice = (priceValue) =>
+        handleValue(priceValue, priceValue * itemQuantity, setItemPrice);
+    
+        const handleQuantity = (quantityValue) =>
+        handleValue(quantityValue, itemPrice * quantityValue, setItemQuantity);
 
     return (
         <div>
@@ -138,17 +126,11 @@ const AddNewItem = () => {
                     </div>
                 </div>
 
-                {/* Dropdown to choose quantity of item type */}
+                {/* Input for quantity*/}
                 <div className="col">
-                    <div className="input-group">
-                        <div className="input-group-prepend">
-                            <label className="input-group-text">Quantity</label>
-                        </div>
-                        <QuantityInput
-                            setQuantity={handleQuantity}
-                            currentQuantity={itemQuantity}
-                            price={itemPrice}
-                        />
+                    <div className="input-group ">
+                        <span className="input-group-text price-input ">Quantity:</span>
+                        <QuantityInput handleQuantity={handleQuantity} currentQuantity={itemQuantity} />
                     </div>
                 </div>
 
@@ -175,7 +157,7 @@ const AddNewItem = () => {
                 <div className="col col-2">
                     <button
                         type="button"
-                        className={`btn ${disableBtn} btn-success`}
+                        className={`btn ${submit ? "" : "disabled"} btn-success`}
                         onClick={submitNewItem}
                     >
                         Add

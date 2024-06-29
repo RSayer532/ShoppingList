@@ -4,8 +4,5 @@ export const calculateRemaining = (budget, itemList) => {
 };
 
 export const calculateMaxQuantity = (oldQuantity, remaining, price) => {
-    let q = parseInt(oldQuantity);
-    console.log(q);
-    console.log(remaining);
-    return Math.min(parseInt(q + remaining / price), 10);
+    return Math.min(parseInt(oldQuantity + remaining / price), 10);
 };
