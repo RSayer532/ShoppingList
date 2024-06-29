@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const QuantityInput = ({handleQuantity, currentQuantity}) => {
-
+const QuantityInput = ({ handleQuantity, currentQuantity }) => {
     return (
         <input
             type="number"
@@ -11,7 +10,7 @@ const QuantityInput = ({handleQuantity, currentQuantity}) => {
             aria-describedby="quantity-input"
             onChange={(event) => handleQuantity(event.target.value)}
         />
-    )
-}
+    );
+};
 
 export default QuantityInput;

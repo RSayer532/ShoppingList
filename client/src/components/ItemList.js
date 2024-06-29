@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { GroceryItem } from ".";
+import { Item } from ".";
 
-import { selectAllGroceries } from "../states/grocerySlice";
+import { selectAllItems } from "../states/itemSlice";
 
 /**
- * Grocery list component
+ * Item list component
  */
-const GroceryList = () => {
-    const groceries = useSelector(selectAllGroceries);
+const ItemList = () => {
+    const groceries = useSelector(selectAllItems);
 
     return (
         <table className="table" style={{ width: "90%", margin: "auto" }}>
@@ -22,12 +22,12 @@ const GroceryList = () => {
                 </tr>
             </thead>
             <tbody>
-                {groceries.map((grocery) => (
-                    <GroceryItem grocery={grocery} key={grocery.name} />
+                {groceries.map((item) => (
+                    <Item item={item} key={item.name} />
                 ))}
             </tbody>
         </table>
     );
 };
 
-export default GroceryList;
+export default ItemList;

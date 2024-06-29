@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-import { GroceryList, Budget, Remaining, TotalSpent, AddNewItem } from "./components";
+import { ItemList, Budget, Remaining, TotalSpent, AddNewItem } from "./components";
 
 import { Provider } from "react-redux";
 import { store } from "./states/store";
@@ -37,7 +37,7 @@ const App = () => {
                 </div>
                 <div className="row mt-4 justify-content-center">
                     <div className="col">
-                        <GroceryList />
+                        <ItemList />
                     </div>
                 </div>
                 <div className="row mt-3">

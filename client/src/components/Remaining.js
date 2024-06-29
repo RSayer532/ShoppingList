@@ -1,5 +1,5 @@
 import React from "react";
-import { selectRemaining } from "../states/grocerySlice";
+import { selectRemaining } from "../states/itemSlice";
 import { useSelector } from "react-redux";
 
 const Remaining = () => {

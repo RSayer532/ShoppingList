@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setBudget, selectBudget, selectExistingTotal } from "../states/grocerySlice";
+import { setBudget, selectBudget, selectExistingTotal } from "../states/itemSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const Budget = () => {

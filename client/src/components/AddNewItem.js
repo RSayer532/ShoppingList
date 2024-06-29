@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRemaining, addGrocery, selectExistingItems } from "../states/grocerySlice";
-import {displayPopup, toggleDisable} from "./common";
-import {QuantityInput} from ".";
+import { selectRemaining, addItem, selectExistingItems } from "../states/itemSlice";
+import { displayPopup, toggleDisable } from "./common";
+import { QuantityInput } from ".";
 
 /**
  * Component for adding a new item to the list
@@ -44,7 +44,7 @@ const AddNewItem = () => {
             quantity: parseInt(itemQuantity)
         };
 
-        dispatch(addGrocery(newItem));
+        dispatch(addItem(newItem));
 
         // Clear inputs
         clearInputs();
@@ -85,14 +85,14 @@ const AddNewItem = () => {
     // Event handler for item price input
     const handlePrice = (priceValue) =>
         handleValue(priceValue, priceValue * itemQuantity, setItemPrice);
-    
-        const handleQuantity = (quantityValue) =>
+
+    const handleQuantity = (quantityValue) =>
         handleValue(quantityValue, itemPrice * quantityValue, setItemQuantity);
 
     return (
         <div>
             <div className="row">
-                {/* Input for grocery item */}
+                {/* Input for item */}
                 <div className="col">
                     <div className="input-group mb-3 department-input">
                         <span className="input-group-text input-btn" id="item-input">
@@ -130,7 +130,10 @@ const AddNewItem = () => {
                 <div className="col">
                     <div className="input-group ">
                         <span className="input-group-text price-input ">Quantity:</span>
-                        <QuantityInput handleQuantity={handleQuantity} currentQuantity={itemQuantity} />
+                        <QuantityInput
+                            handleQuantity={handleQuantity}
+                            currentQuantity={itemQuantity}
+                        />
                     </div>
                 </div>
 

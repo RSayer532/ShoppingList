@@ -4,7 +4,7 @@ import { calculateRemaining } from "../utils/calculations";
 const initialState = {
     budget: 100,
     remaining: 100 - (0.5 * 2 + 1 * 5),
-    groceryItems: [
+    items: [
         {
             name: "Banana",
             price: 0.5,
@@ -18,24 +18,22 @@ const initialState = {
     ]
 };
 
-const grocerySlice = createSlice({
+const itemSlice = createSlice({
     name: "groceries",
     initialState,
     reducers: {
-        addGrocery(state, action) {
+        addItem(state, action) {
             // Add item to array
-            state.groceryItems.push(action.payload);
+            state.items.push(action.payload);
 
             // Modify the remaining budget
-            state.remaining = calculateRemaining(state.budget, state.groceryItems);
+            state.remaining = calculateRemaining(state.budget, state.items);
         },
 
-        removeGrocery(state, action) {
-            // Find grocery item in array and remove
-            let itemIndex = state.groceryItems.findIndex(
-                (item) => item.name === action.payload.name
-            );
-            state.groceryItems.splice(itemIndex, 1);
+        removeItem(state, action) {
+            // Find item in array and remove
+            let itemIndex = state.items.findIndex((item) => item.name === action.payload.name);
+            state.items.splice(itemIndex, 1);
 
             // Add the total cost of the number of items back to remaining
             let total = action.payload.price * action.payload.quantity;
@@ -47,12 +45,12 @@ const grocerySlice = createSlice({
             let quantity = action.payload.quantity;
             let name = action.payload.name;
 
-            // Update the item in the grocery array
-            let itemIndex = state.groceryItems.findIndex((item) => item.name === name);
-            state.groceryItems[itemIndex].quantity = quantity;
+            // Update the item in the array
+            let itemIndex = state.items.findIndex((item) => item.name === name);
+            state.items[itemIndex].quantity = quantity;
 
             // update the remaining value
-            state.remaining = calculateRemaining(state.budget, state.groceryItems);
+            state.remaining = calculateRemaining(state.budget, state.items);
         },
 
         setBudget(state, action) {
@@ -60,23 +58,23 @@ const grocerySlice = createSlice({
             state.budget = action.payload;
 
             // Recalculate the remaining value
-            state.remaining = calculateRemaining(state.budget, state.groceryItems);
+            state.remaining = calculateRemaining(state.budget, state.items);
         }
     }
 });
 
-export const { addGrocery, setBudget, removeGrocery, modifyQuantity } = grocerySlice.actions;
+export const { addItem, setBudget, removeItem, modifyQuantity } = itemSlice.actions;
 
-export default grocerySlice.reducer;
+export default itemSlice.reducer;
 
-export const selectAllGroceries = (state) => state.groceries.groceryItems;
+export const selectAllItems = (state) => state.groceries.items;
 export const selectBudget = (state) => state.groceries.budget;
 export const selectRemaining = (state) => state.groceries.remaining;
 export const selectSpendingLimit = (state) => state.groceries.spendingLimit;
 
-export const selectExistingItems = createSelector([selectAllGroceries], (items) =>
+export const selectExistingItems = createSelector([selectAllItems], (items) =>
     items.map((item) => item.name)
 );
-export const selectExistingTotal = createSelector([selectAllGroceries], (items) =>
+export const selectExistingTotal = createSelector([selectAllItems], (items) =>
     items.reduce((total, item) => total + item.price, 0)
 );
