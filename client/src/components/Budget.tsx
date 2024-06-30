@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 // Common functions
 import { poundSign, displayPopup, checkNaN } from "./common";
 
+/** Styles */
+import "./css/common.css";
+
 const Budget = () => {
     // Global states
     const budget: number = useSelector(selectBudget);
@@ -55,8 +58,8 @@ const Budget = () => {
                     onChange={(event) => handleNewBudget(event.target.value)}
                 />
             </div>
-            <div className={displayPopup(budgetError)}>
-                <p>The budget cannot be less than the total already on the list</p>
+            <div className={`${displayPopup(budgetError)} error-warning`}>
+                <p>Budget lower than current total</p>
             </div>
         </>
     );

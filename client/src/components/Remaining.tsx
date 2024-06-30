@@ -11,16 +11,13 @@ const Remaining = () => {
     // Global states
     const remaining = useSelector(selectRemaining);
 
-    // Local variable
-    const highlight = remaining >= 0 ? "" : "bg-warning";
-
     return (
         <div className={`input-group mb-3`}>
             <span className="input-group-text" id="remaining">
                 Remaining ({poundSign}):
             </span>
             <span
-                className={`form-control disable ${highlight}`}
+                className="form-control disable"
                 aria-label="Remaining"
                 aria-describedby="remaining"
             >

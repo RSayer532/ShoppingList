@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Item } from ".";
 
@@ -12,7 +12,7 @@ const ItemList = () => {
     const items = useSelector(selectAllItems);
 
     return (
-        <table className="table" style={{ width: "90%", margin: "auto" }}>
+        <table className="table text-center">
             <thead className="thead">
                 <tr>
                     <th scope="col">Item</th>
@@ -24,7 +24,7 @@ const ItemList = () => {
             </thead>
             <tbody>
                 {items.map((item) => (
-                    <Item item={item} key={item.name} />
+                    <Item item={item} />
                 ))}
             </tbody>
         </table>

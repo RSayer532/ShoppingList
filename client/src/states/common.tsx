@@ -19,12 +19,14 @@ export interface QuantityPL {
     };
 }
 
+export interface EditingPL {
+    payload: boolean;
+}
+
 /** Common functions */
 export const calculateRemaining = (budget: number, itemList: ItemInt[]) => {
     let total = itemList.reduce((total, item) => total + item.price * item.quantity, 0);
     return budget - total;
 };
 
-export const calculateTotalSpent = (itemList: ItemInt[]) => {
-    return itemList.reduce((total, item) => total + item.price * item.quantity, 0);
-};
+

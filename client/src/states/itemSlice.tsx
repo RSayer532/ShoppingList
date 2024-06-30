@@ -4,14 +4,14 @@ import { createSlice, createSelector } from "@reduxjs/toolkit";
 /** Interfaces/types */
 import {
     calculateRemaining,
-    calculateTotalSpent,
     RootState,
     ItemPL,
     BudgetPL,
-    QuantityPL
+    QuantityPL,
+    EditingPL
 } from "./common";
 
-import { ItemsState } from "../common";
+import { ItemsState, calculateTotalSpent } from "../common";
 
 // For testing purposes
 const initialState: ItemsState = {
@@ -28,7 +28,8 @@ const initialState: ItemsState = {
             price: 1.0,
             quantity: 5
         }
-    ]
+    ],
+    inEditingMode: false
 };
 
 const itemSlice = createSlice({
@@ -72,12 +73,16 @@ const itemSlice = createSlice({
 
             // Recalculate the remaining value
             state.remaining = calculateRemaining(state.budget, state.items);
+        },
+
+        setEditingMode(state: ItemsState, action: EditingPL) {
+            state.inEditingMode = action.payload;
         }
     }
 });
 
 // Export action creators
-export const { addItem, setBudget, removeItem, modifyQuantity } = itemSlice.actions;
+export const { addItem, setBudget, removeItem, modifyQuantity, setEditingMode } = itemSlice.actions;
 
 // Export slice's reducer
 export default itemSlice.reducer;
@@ -86,6 +91,7 @@ export default itemSlice.reducer;
 export const selectAllItems = (state: RootState) => state.groceries.items;
 export const selectBudget = (state: RootState) => state.groceries.budget;
 export const selectRemaining = (state: RootState) => state.groceries.remaining;
+export const selectEditing = (state: RootState) => state.groceries.inEditingMode;
 
 // Memoized selector functions
 export const selectExistingItems = createSelector([selectAllItems], (items) =>

@@ -10,6 +10,10 @@ import { displayPopup, toggleState, checkNaN } from "./common";
 /** Imported components */
 import { QuantityInput } from ".";
 
+/** Styles */
+import "./css/common.css";
+
+
 /**
  * Component for adding a new item to the list
  */
@@ -70,6 +74,11 @@ const AddNewItem = () => {
         setItemName(inputName);
     };
 
+    enum Value {
+        Price,
+        Quantity
+    }
+
     // Handler function for input types
     /**
      * 
@@ -77,8 +86,12 @@ const AddNewItem = () => {
      * @param errorSetter setState action for the required error state
      * @param stateSetter setState action for the required state
      */
-    const handleValue = (value: string, errorSetter: Function, stateSetter: Function) => {
+    const handleValue = (value: string, valueType: Value, errorSetter: Function, stateSetter: Function) => {
+
         let tempValue = parseFloat(value);
+
+        // Get the value of the other quantity (price or quantity) for calculating the total price of items
+        let otherValue = (valueType === Value.Price) ? itemQuantity : itemPrice;
 
         // Check if the input is empty
         if (isNaN(tempValue)) {
@@ -88,25 +101,28 @@ const AddNewItem = () => {
             return;
         }
 
-        // Check if the total of the items is more than the remaining budget
-        let total = tempValue * itemQuantity;
-        if (total > remaining) {
-            setBudgetError(true);
+        // Check before calculating total that the price/quantity is not 0 as well      
+        if (isNaN(otherValue)) {
+            setTotal(0);
         } else {
-            setBudgetError(false);
+            setTotal(otherValue * tempValue);
         }
 
+        // Check if the the new total is within the remaining amount
+        let inBudget = (tempValue * otherValue) < remaining;
+        toggleState(inBudget, setBudgetError);
+
         stateSetter(tempValue);
-        setTotal(total);
         errorSetter(false);
     };
 
-    const handlePrice = (value: string) => handleValue(value, setPriceError, setItemPrice);
-    const handleQuantity = (value: string) => handleValue(value, setQuantityError, setItemQuantity);
+    // Specific implementations of above function
+    const handlePrice = (value: string) => handleValue(value, Value.Price, setPriceError, setItemPrice);
+    const handleQuantity = (value: string) => handleValue(value, Value.Quantity, setQuantityError, setItemQuantity);
 
     return (
         <div>
-            <div className="row">
+            <div className="row justify-content-center">
                 {/* Input for item */}
                 <div className="col">
                     <div className="input-group mb-3 department-input">
@@ -123,6 +139,12 @@ const AddNewItem = () => {
                             onChange={(event) => handleName(event.target.value)}
                         />
                     </div>
+
+                    {/* Simple popup for name error */}
+                    <div className={`${displayPopup(nameError)} error-warning`}>
+                        <p>Item in list</p>
+                    </div>
+
                 </div>
 
                 {/* Input for price of single item */}
@@ -139,6 +161,10 @@ const AddNewItem = () => {
                             onChange={(event) => handlePrice(event.target.value)}
                         />
                     </div>
+                    {/* Simple popup for price error */}
+                    <div className={`${displayPopup(priceError)} error-warning`}>
+                        <p>No price given</p>
+                    </div>
                 </div>
 
                 {/* Input for quantity*/}
@@ -149,6 +175,11 @@ const AddNewItem = () => {
                             handleQuantity={handleQuantity}
                             currentQuantity={itemQuantity}
                         />
+                    </div>
+
+                    {/* Simple popup for quantity error */}
+                    <div className={`${displayPopup(quantityError)} error-warning`}>
+                        <p>Quantity empty</p>
                     </div>
                 </div>
 
@@ -172,7 +203,7 @@ const AddNewItem = () => {
                 <div className="col col-2">
                     <button
                         type="button"
-                        className={`btn ${submit ? "" : "disabled"} btn-success`}
+                        className={`btn ${submit ? "" : "disabled"} btn-success action-btn`}
                         onClick={submitNewItem}
                     >
                         Add
@@ -181,24 +212,10 @@ const AddNewItem = () => {
             </div>
 
             {/* Simple popup for testing */}
-            <div className={displayPopup(budgetError)}>
+            <div className={`${displayPopup(budgetError)} error-warning`}>
                 <p>The total price is greater than the remaning amount</p>
-            </div>
+            </div>         
 
-            {/* Simple popup for testing */}
-            <div className={displayPopup(nameError)}>
-                <p>This item is already in the list, add to quantity</p>
-            </div>
-
-            {/* Simple popup for testing */}
-            <div className={displayPopup(quantityError)}>
-                <p>Must have at least one</p>
-            </div>
-
-            {/* Simple popup for testing */}
-            <div className={displayPopup(priceError)}>
-                <p>Must enter a price</p>
-            </div>
         </div>
     );
 };

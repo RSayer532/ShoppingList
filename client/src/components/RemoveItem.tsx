@@ -3,6 +3,9 @@ import { removeItem } from "../states/itemSlice";
 import { useDispatch } from "react-redux";
 import { ItemProps } from "./common";
 
+/** Styles */
+import "./css/common.css";
+
 /**
  * Button component to remove item from the list
  */
@@ -16,7 +19,7 @@ const RemoveItem = ({ item }: ItemProps) => {
     };
 
     return (
-        <button type="button" className="btn-danger btn" onClick={handleClick}>
+        <button type="button" className="btn-danger btn action-btn" onClick={handleClick}>
             Delete
         </button>
     );
