@@ -1,7 +1,11 @@
 import React from "react";
+
+// Redux
 import { selectRemaining } from "../states/itemSlice";
 import { useSelector } from "react-redux";
-import {poundSign } from "./common";
+
+// Common imports
+import { poundSign } from "./common";
 
 const Remaining = () => {
     // Global states
@@ -16,7 +20,6 @@ const Remaining = () => {
                 Remaining ({poundSign}):
             </span>
             <span
-                type="number"
                 className={`form-control disable ${highlight}`}
                 aria-label="Remaining"
                 aria-describedby="remaining"

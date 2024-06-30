@@ -1,34 +1,50 @@
 import React, { useState } from "react";
-import RemoveItem from "./RemoveItem";
+
+/** Redux */
 import { useDispatch, useSelector } from "react-redux";
 import { modifyQuantity, selectRemaining } from "../states/itemSlice";
-import { displayPopup, toggleDisable, poundSign } from "./common";
-import { QuantityInput } from ".";
 
-const Item = ({ item }) => {
+/** Common functions/types */
+import { displayPopup, toggleState, poundSign, ItemProps } from "./common";
+
+/** Imported Components */
+import { QuantityInput } from ".";
+import RemoveItem from "./RemoveItem";
+
+const Item = ({ item }: ItemProps) => {
     // Global states
     const dispatch = useDispatch();
-    const remaining = useSelector(selectRemaining);
+    const remaining: number = useSelector(selectRemaining);
 
     // Local states/variables
-    const [quantity, setQuantity] = useState(item.quantity);
-    const [edit, setEdit] = useState(true);
-    const [quantityError, setQuantityError] = useState(false);
- 
+    const [quantity, setQuantity] = useState<number>(item.quantity);
+    const [edit, setEdit] = useState<boolean>(true);
+    const [quantityError, setQuantityError] = useState<boolean>(false);
+    const [total, setTotal] = useState(item.quantity * item.price);
+
     // Check whether the input quantity is valid, given the price and current remaining value and prevent user from submitting
-    const handleQuantity = (value) => {
-        let tempValue = value === "" ? 0 : parseInt(value);
-        let tempTotal = parseInt(tempValue) * parseFloat(item.price);
+    const handleQuantity = (value: string) => {
+        let tempValue = parseFloat(value);
+
+        if (isNaN(tempValue)) {
+            setQuantity(NaN);
+            setTotal(0);
+            setEdit(false);
+            return;
+        }
+
+        let tempTotal = tempValue * item.price;
 
         if (tempTotal > remaining) {
             setQuantityError(true);
             setEdit(false);
         } else {
-            toggleDisable((value===""), setEdit);
+            toggleState(isNaN(tempValue), setEdit);
             setQuantityError(false);
         }
 
-        setQuantity(value);
+        setQuantity(tempValue);
+        setTotal(tempTotal);
     };
 
     // Event handler for submitting edited quantity
@@ -67,7 +83,7 @@ const Item = ({ item }) => {
             </td>
             {/* Total price */}
             <td>
-                {`\u00A3`} {(item.price * quantity).toFixed(2)}
+                {`\u00A3`} {total.toFixed(2)}
             </td>
             {/* Delete button */}
             <td>

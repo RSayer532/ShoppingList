@@ -1,11 +1,16 @@
 import React from "react";
+import { checkNaN } from "./common";
 
-const QuantityInput = ({ handleQuantity, currentQuantity }) => {
+interface QuantityInputProps {
+    handleQuantity: Function;
+    currentQuantity: number;
+}
+const QuantityInput = ({ handleQuantity, currentQuantity }: QuantityInputProps) => {
     return (
         <input
             type="number"
             aria-label="Quantity"
-            value={currentQuantity}
+            value={checkNaN(currentQuantity)}
             className="form-control"
             aria-describedby="quantity-input"
             onChange={(event) => handleQuantity(event.target.value)}

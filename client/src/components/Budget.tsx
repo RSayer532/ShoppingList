@@ -1,37 +1,42 @@
 import React, { useState } from "react";
+
+// Redux
 import { setBudget, selectBudget, selectExistingTotal } from "../states/itemSlice";
 import { useSelector, useDispatch } from "react-redux";
-import {poundSign} from "./common";
+
+// Common functions
+import { poundSign, displayPopup, checkNaN } from "./common";
 
 const Budget = () => {
     // Global states
-    const budget = useSelector(selectBudget);
-    const currentTotal = useSelector(selectExistingTotal);
+    const budget: number = useSelector(selectBudget);
+    const currentTotal: number = useSelector(selectExistingTotal);
     const dispatch = useDispatch();
 
     // Component states
-    const [newBudget, setNewBudget] = useState(budget);
-    const [budgetError, setBudgetError] = useState(false);
-
-    const displayPopup = (error) => (error ? "visible" : "invisible");
+    const [newBudget, setNewBudget] = useState<number>(budget);
+    const [budgetError, setBudgetError] = useState<boolean>(false);
 
     // Event handler to determine if the input is valid and set the budget
-    const handleNewBudget = (budgetString) => {
-        setNewBudget(budgetString);
+    const handleNewBudget = (value: string) => {
+        let tempValue = parseFloat(value);
 
-        // will this cause problems in state mismatch???
-        let newBudgetFloat = parseFloat(budgetString);
-        if (!isNaN(newBudgetFloat)) {
-            // Budget cannot be less than total of items in the current list
-            if (currentTotal > newBudgetFloat) {
-                setBudgetError(true);
-            } else {
-                setBudgetError(false);
-            }
-
-            // Dispatch budget, even if incorrect, to update the remaining realistically
-            dispatch(setBudget(newBudgetFloat));
+        // Check if the input is empty
+        if (isNaN(tempValue)) {
+            setNewBudget(NaN);
+            setBudgetError(true);
+            return;
         }
+
+        // Check if the current total of items is more than the input budget value
+        if (currentTotal > tempValue) {
+            setBudgetError(true);
+        } else {
+            setBudgetError(false);
+        }
+
+        setNewBudget(tempValue);
+        dispatch(setBudget(tempValue));
     };
 
     return (
@@ -44,7 +49,7 @@ const Budget = () => {
                     type="number"
                     step="10"
                     className="form-control"
-                    value={newBudget}
+                    value={checkNaN(newBudget)}
                     aria-label="Budget"
                     aria-describedby="budget-input"
                     onChange={(event) => handleNewBudget(event.target.value)}

@@ -8,7 +8,8 @@ import { selectAllItems } from "../states/itemSlice";
  * Item list component
  */
 const ItemList = () => {
-    const groceries = useSelector(selectAllItems);
+
+    const items = useSelector(selectAllItems);
 
     return (
         <table className="table" style={{ width: "90%", margin: "auto" }}>
@@ -22,7 +23,7 @@ const ItemList = () => {
                 </tr>
             </thead>
             <tbody>
-                {groceries.map((item) => (
+                {items.map((item) => (
                     <Item item={item} key={item.name} />
                 ))}
             </tbody>

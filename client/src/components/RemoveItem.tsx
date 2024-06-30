@@ -1,11 +1,12 @@
 import React from "react";
 import { removeItem } from "../states/itemSlice";
 import { useDispatch } from "react-redux";
+import { ItemProps } from "./common";
 
 /**
  * Button component to remove item from the list
  */
-const RemoveItem = ({ item }) => {
+const RemoveItem = ({ item }: ItemProps) => {
     // Global state
     const dispatch = useDispatch();
 

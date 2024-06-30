@@ -1,7 +1,20 @@
+/** Redux */
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { calculateRemaining, calculateTotalSpent } from "./common";
 
-const initialState = {
+/** Interfaces/types */
+import {
+    calculateRemaining,
+    calculateTotalSpent,
+    RootState,
+    ItemPL,
+    BudgetPL,
+    QuantityPL
+} from "./common";
+
+import { ItemsState } from "../common";
+
+// For testing purposes
+const initialState: ItemsState = {
     budget: 100,
     remaining: 100 - (0.5 * 2 + 1 * 5),
     items: [
@@ -22,7 +35,7 @@ const itemSlice = createSlice({
     name: "groceries",
     initialState,
     reducers: {
-        addItem(state, action) {
+        addItem(state: ItemsState, action: ItemPL) {
             // Add item to array
             state.items.push(action.payload);
 
@@ -30,7 +43,7 @@ const itemSlice = createSlice({
             state.remaining = calculateRemaining(state.budget, state.items);
         },
 
-        removeItem(state, action) {
+        removeItem(state: ItemsState, action: ItemPL) {
             // Find item in array and remove
             let itemIndex = state.items.findIndex((item) => item.name === action.payload.name);
             state.items.splice(itemIndex, 1);
@@ -40,7 +53,7 @@ const itemSlice = createSlice({
             state.remaining += total;
         },
 
-        modifyQuantity(state, action) {
+        modifyQuantity(state: ItemsState, action: QuantityPL) {
             // Get values from action
             let quantity = action.payload.quantity;
             let name = action.payload.name;
@@ -53,7 +66,7 @@ const itemSlice = createSlice({
             state.remaining = calculateRemaining(state.budget, state.items);
         },
 
-        setBudget(state, action) {
+        setBudget(state: ItemsState, action: BudgetPL) {
             // Set budget value
             state.budget = action.payload;
 
@@ -63,15 +76,18 @@ const itemSlice = createSlice({
     }
 });
 
+// Export action creators
 export const { addItem, setBudget, removeItem, modifyQuantity } = itemSlice.actions;
 
+// Export slice's reducer
 export default itemSlice.reducer;
 
-export const selectAllItems = (state) => state.groceries.items;
-export const selectBudget = (state) => state.groceries.budget;
-export const selectRemaining = (state) => state.groceries.remaining;
-export const selectSpendingLimit = (state) => state.groceries.spendingLimit;
+// Selector functions
+export const selectAllItems = (state: RootState) => state.groceries.items;
+export const selectBudget = (state: RootState) => state.groceries.budget;
+export const selectRemaining = (state: RootState) => state.groceries.remaining;
 
+// Memoized selector functions
 export const selectExistingItems = createSelector([selectAllItems], (items) =>
     items.map((item) => item.name)
 );

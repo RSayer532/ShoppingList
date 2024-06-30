@@ -1,0 +1,24 @@
+.action-btn {
+    width: 80px;
+}
+
+.input-btn {
+    background-color: lightsteelblue;
+    color: white;
+}
+
+.amount-input {
+    width: 200px;
+    height: auto;
+    float: right;
+}
+
+.department-input {
+    width: 300px;
+}
+
+.submit-btn {
+    float: right;
+    background-color: seagreen;
+    color: white;
+}

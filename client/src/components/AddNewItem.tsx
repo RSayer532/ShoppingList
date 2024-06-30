@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
+
+/**Redux */
 import { useDispatch, useSelector } from "react-redux";
 import { selectRemaining, addItem, selectExistingItems } from "../states/itemSlice";
-import { displayPopup, toggleDisable } from "./common";
+
+/** Functions */
+import { displayPopup, toggleState, checkNaN } from "./common";
+
+/** Imported components */
 import { QuantityInput } from ".";
 
 /**
@@ -10,12 +16,14 @@ import { QuantityInput } from ".";
 const AddNewItem = () => {
     // Component states
     const [itemName, setItemName] = useState("");
-    const [itemPrice, setItemPrice] = useState("");
-    const [itemQuantity, setItemQuantity] = useState("");
-    const [total, setTotal] = useState("0.00");
+    const [itemPrice, setItemPrice] = useState(0);
+    const [itemQuantity, setItemQuantity] = useState(1);
+    const [total, setTotal] = useState(0);
     const [submit, setSubmit] = useState(false);
     const [budgetError, setBudgetError] = useState(false);
     const [nameError, setNameError] = useState(false);
+    const [quantityError, setQuantityError] = useState(false);
+    const [priceError, setPriceError] = useState(false);
 
     // Global states
     const dispatch = useDispatch();
@@ -24,25 +32,25 @@ const AddNewItem = () => {
 
     // Clear inputs of each element
     const clearInputs = () => {
-        setItemPrice("");
-        setTotal("");
+        setItemPrice(0);
+        setTotal(0);
         setItemName("");
         setItemQuantity(1);
     };
 
-    // do i need use effect??????
+    // TODO: do i need use effect??????
     useEffect(() => {
         // If no item or price is given, or the total is too large then disable submit button
-        let condition = itemName === "" || itemPrice === "" || budgetError;
-        toggleDisable(condition, setSubmit);
-    }, [itemName, itemPrice, budgetError]);
+        let condition = itemName === "" || isNaN(itemPrice) || isNaN(itemQuantity) || budgetError;
+        toggleState(condition, setSubmit);
+    }, [itemName, itemPrice, budgetError, itemQuantity]);
 
     // Event handler for item submission to current list
     const submitNewItem = () => {
         const newItem = {
             name: itemName,
-            price: parseFloat(itemPrice),
-            quantity: parseInt(itemQuantity)
+            price: itemPrice,
+            quantity: itemQuantity
         };
 
         dispatch(addItem(newItem));
@@ -52,7 +60,7 @@ const AddNewItem = () => {
     };
 
     // Event handler for item name input
-    const handleName = (inputName) => {
+    const handleName = (inputName: string) => {
         //Check if already have item in the list;
         if (itemList.includes(inputName)) {
             setNameError(true);
@@ -62,33 +70,39 @@ const AddNewItem = () => {
         setItemName(inputName);
     };
 
-    const handleValue = (value, total, setMethod) => {
-        // Break out of function if no price value to prevent NaN error if input empty
-        // Number type of HTML element ensures that only digits input
-        if (value === "") {
-            setMethod("");
-            setTotal("");
+    // Handler function for input types
+    /**
+     * 
+     * @param value Input value from HTML element
+     * @param errorSetter setState action for the required error state
+     * @param stateSetter setState action for the required state
+     */
+    const handleValue = (value: string, errorSetter: Function, stateSetter: Function) => {
+        let tempValue = parseFloat(value);
+
+        // Check if the input is empty
+        if (isNaN(tempValue)) {
+            setTotal(0);
+            stateSetter(NaN);
+            errorSetter(true);
             return;
         }
 
-        // Determine if within budget and trigger popup
+        // Check if the total of the items is more than the remaining budget
+        let total = tempValue * itemQuantity;
         if (total > remaining) {
             setBudgetError(true);
         } else {
             setBudgetError(false);
         }
 
-        // Still allow the user to see their input
-        setMethod(value);
-        setTotal(String(total));
+        stateSetter(tempValue);
+        setTotal(total);
+        errorSetter(false);
     };
 
-    // Event handler for item price input
-    const handlePrice = (priceValue) =>
-        handleValue(priceValue, priceValue * itemQuantity, setItemPrice);
-
-    const handleQuantity = (quantityValue) =>
-        handleValue(quantityValue, itemPrice * quantityValue, setItemQuantity);
+    const handlePrice = (value: string) => handleValue(value, setPriceError, setItemPrice);
+    const handleQuantity = (value: string) => handleValue(value, setQuantityError, setItemQuantity);
 
     return (
         <div>
@@ -119,7 +133,7 @@ const AddNewItem = () => {
                             type="number"
                             className="form-control"
                             aria-label="Price"
-                            value={itemPrice}
+                            value={checkNaN(itemPrice)}
                             placeholder="0.00"
                             aria-describedby="price-input"
                             onChange={(event) => handlePrice(event.target.value)}
@@ -145,11 +159,8 @@ const AddNewItem = () => {
                             Total ({`\u00A3`}):
                         </span>
                         <span
-                            type="number"
                             className="form-control"
                             aria-label="Total"
-                            placeholder="0.00"
-                            value={total}
                             aria-describedby="price-total"
                         >
                             {total}
@@ -177,6 +188,16 @@ const AddNewItem = () => {
             {/* Simple popup for testing */}
             <div className={displayPopup(nameError)}>
                 <p>This item is already in the list, add to quantity</p>
+            </div>
+
+            {/* Simple popup for testing */}
+            <div className={displayPopup(quantityError)}>
+                <p>Must have at least one</p>
+            </div>
+
+            {/* Simple popup for testing */}
+            <div className={displayPopup(priceError)}>
+                <p>Must enter a price</p>
             </div>
         </div>
     );
