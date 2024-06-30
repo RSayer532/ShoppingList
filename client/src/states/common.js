@@ -3,6 +3,6 @@ export const calculateRemaining = (budget, itemList) => {
     return budget - total;
 };
 
-export const calculateMaxQuantity = (oldQuantity, remaining, price) => {
-    return Math.min(parseInt(oldQuantity + remaining / price), 10);
-};
+export const calculateTotalSpent = (itemList) => {
+    return itemList.reduce((total, item) => total + item.price * item.quantity, 0);
+}

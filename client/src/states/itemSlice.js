@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { calculateRemaining } from "../utils/calculations";
+import { calculateRemaining, calculateTotalSpent } from "./common";
 
 const initialState = {
     budget: 100,
@@ -75,6 +75,4 @@ export const selectSpendingLimit = (state) => state.groceries.spendingLimit;
 export const selectExistingItems = createSelector([selectAllItems], (items) =>
     items.map((item) => item.name)
 );
-export const selectExistingTotal = createSelector([selectAllItems], (items) =>
-    items.reduce((total, item) => total + item.price, 0)
-);
+export const selectExistingTotal = createSelector([selectAllItems], calculateTotalSpent);

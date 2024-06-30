@@ -1,6 +1,7 @@
 import React from "react";
 import { selectRemaining } from "../states/itemSlice";
 import { useSelector } from "react-redux";
+import {poundSign } from "./common";
 
 const Remaining = () => {
     // Global states
@@ -12,7 +13,7 @@ const Remaining = () => {
     return (
         <div className={`input-group mb-3`}>
             <span className="input-group-text" id="remaining">
-                Remaining ({`\u00A3`}):
+                Remaining ({poundSign}):
             </span>
             <span
                 type="number"

@@ -7,3 +7,5 @@ export const toggleDisable = (condition, setState) => {
         setState(true);
     }
 };
+
+export const poundSign = `\u00A3`;

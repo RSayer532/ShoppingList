@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { setBudget, selectBudget, selectExistingTotal } from "../states/itemSlice";
 import { useSelector, useDispatch } from "react-redux";
+import {poundSign} from "./common";
 
 const Budget = () => {
     // Global states
@@ -37,7 +38,7 @@ const Budget = () => {
         <>
             <div className="input-group mb-3">
                 <span className="input-group-text input-btn" id="budget-input">
-                    Budget ({`\u00A3`}):
+                    Budget ({poundSign}):
                 </span>
                 <input
                     type="number"

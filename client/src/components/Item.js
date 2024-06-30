@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import RemoveItem from "./RemoveItem";
 import { useDispatch, useSelector } from "react-redux";
 import { modifyQuantity, selectRemaining } from "../states/itemSlice";
-import { displayPopup, toggleDisable } from "./common";
+import { displayPopup, toggleDisable, poundSign } from "./common";
 import { QuantityInput } from ".";
 
 const Item = ({ item }) => {
@@ -14,20 +14,17 @@ const Item = ({ item }) => {
     const [quantity, setQuantity] = useState(item.quantity);
     const [edit, setEdit] = useState(true);
     const [quantityError, setQuantityError] = useState(false);
-
-    useEffect(() => {
-        let tempTotal = parseInt(quantity) * parseFloat(item.price);
-        // Check that at least one item is valid...??????
-        let condition = remaining <= tempTotal || quantity === "";
-        toggleDisable(condition, setEdit);
-    }, [remaining, quantity, item]);
-
-    // Check whether the input quantity is valid, given the price and current remaining value
+ 
+    // Check whether the input quantity is valid, given the price and current remaining value and prevent user from submitting
     const handleQuantity = (value) => {
         let tempValue = value === "" ? 0 : parseInt(value);
-        if (tempValue * item.price > remaining) {
+        let tempTotal = parseInt(tempValue) * parseFloat(item.price);
+
+        if (tempTotal > remaining) {
             setQuantityError(true);
+            setEdit(false);
         } else {
+            toggleDisable((value===""), setEdit);
             setQuantityError(false);
         }
 
@@ -61,7 +58,7 @@ const Item = ({ item }) => {
 
                 {/* Simple popup for testing */}
                 <div className={displayPopup(quantityError)}>
-                    <p>{`${quantity} of ${item.name} is not within remaining ${remaining}`}</p>
+                    <p>{`${quantity} of ${item.name} is not within remaining ${poundSign}${remaining}`}</p>
                 </div>
             </td>
             {/* Item price */}

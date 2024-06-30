@@ -22,7 +22,7 @@ const AddNewItem = () => {
     const remaining = useSelector(selectRemaining);
     const itemList = useSelector(selectExistingItems);
 
-    // clear inputs of each element
+    // Clear inputs of each element
     const clearInputs = () => {
         setItemPrice("");
         setTotal("");
@@ -30,6 +30,7 @@ const AddNewItem = () => {
         setItemQuantity(1);
     };
 
+    // do i need use effect??????
     useEffect(() => {
         // If no item or price is given, or the total is too large then disable submit button
         let condition = itemName === "" || itemPrice === "" || budgetError;
