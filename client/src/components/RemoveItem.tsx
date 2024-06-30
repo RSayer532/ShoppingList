@@ -1,21 +1,29 @@
 import React from "react";
-import { removeItem } from "../states/itemSlice";
+import { removeItem, setEditingMode } from "../states/itemSlice";
 import { useDispatch } from "react-redux";
-import { ItemProps } from "./common";
 
 /** Styles */
 import "./css/common.css";
+import { ItemInt } from "../common";
+
+interface RemoveProps {
+    item: ItemInt;
+    editing: boolean;
+}
 
 /**
  * Button component to remove item from the list
  */
-const RemoveItem = ({ item }: ItemProps) => {
+const RemoveItem = ({ item, editing }: RemoveProps) => {
     // Global state
     const dispatch = useDispatch();
 
     // Event handler for clicking on delete button
     const handleClick = () => {
         dispatch(removeItem(item));
+        if (editing) {
+            dispatch(setEditingMode(false));
+        }
     };
 
     return (

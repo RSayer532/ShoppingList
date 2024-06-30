@@ -8,7 +8,6 @@ import { selectAllItems } from "../states/itemSlice";
  * Item list component
  */
 const ItemList = () => {
-
     const items = useSelector(selectAllItems);
 
     return (

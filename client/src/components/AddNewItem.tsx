@@ -13,7 +13,6 @@ import { QuantityInput } from ".";
 /** Styles */
 import "./css/common.css";
 
-
 /**
  * Component for adding a new item to the list
  */
@@ -81,17 +80,21 @@ const AddNewItem = () => {
 
     // Handler function for input types
     /**
-     * 
+     *
      * @param value Input value from HTML element
      * @param errorSetter setState action for the required error state
      * @param stateSetter setState action for the required state
      */
-    const handleValue = (value: string, valueType: Value, errorSetter: Function, stateSetter: Function) => {
-
+    const handleValue = (
+        value: string,
+        valueType: Value,
+        errorSetter: Function,
+        stateSetter: Function
+    ) => {
         let tempValue = parseFloat(value);
 
         // Get the value of the other quantity (price or quantity) for calculating the total price of items
-        let otherValue = (valueType === Value.Price) ? itemQuantity : itemPrice;
+        let otherValue = valueType === Value.Price ? itemQuantity : itemPrice;
 
         // Check if the input is empty
         if (isNaN(tempValue)) {
@@ -101,7 +104,7 @@ const AddNewItem = () => {
             return;
         }
 
-        // Check before calculating total that the price/quantity is not 0 as well      
+        // Check before calculating total that the price/quantity is not 0 as well
         if (isNaN(otherValue)) {
             setTotal(0);
         } else {
@@ -109,7 +112,7 @@ const AddNewItem = () => {
         }
 
         // Check if the the new total is within the remaining amount
-        let inBudget = (tempValue * otherValue) < remaining;
+        let inBudget = tempValue * otherValue < remaining;
         toggleState(inBudget, setBudgetError);
 
         stateSetter(tempValue);
@@ -117,8 +120,10 @@ const AddNewItem = () => {
     };
 
     // Specific implementations of above function
-    const handlePrice = (value: string) => handleValue(value, Value.Price, setPriceError, setItemPrice);
-    const handleQuantity = (value: string) => handleValue(value, Value.Quantity, setQuantityError, setItemQuantity);
+    const handlePrice = (value: string) =>
+        handleValue(value, Value.Price, setPriceError, setItemPrice);
+    const handleQuantity = (value: string) =>
+        handleValue(value, Value.Quantity, setQuantityError, setItemQuantity);
 
     return (
         <div>
@@ -144,7 +149,6 @@ const AddNewItem = () => {
                     <div className={`${displayPopup(nameError)} error-warning`}>
                         <p>Item in list</p>
                     </div>
-
                 </div>
 
                 {/* Input for price of single item */}
@@ -214,8 +218,7 @@ const AddNewItem = () => {
             {/* Simple popup for testing */}
             <div className={`${displayPopup(budgetError)} error-warning`}>
                 <p>The total price is greater than the remaning amount</p>
-            </div>         
-
+            </div>
         </div>
     );
 };

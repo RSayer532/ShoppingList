@@ -2,14 +2,7 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 /** Interfaces/types */
-import {
-    calculateRemaining,
-    RootState,
-    ItemPL,
-    BudgetPL,
-    QuantityPL,
-    EditingPL
-} from "./common";
+import { calculateRemaining, RootState, ItemPL, BudgetPL, QuantityPL, EditingPL } from "./common";
 
 import { ItemsState, calculateTotalSpent } from "../common";
 

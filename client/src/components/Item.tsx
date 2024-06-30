@@ -2,7 +2,13 @@ import React, { useState } from "react";
 
 /** Redux */
 import { useDispatch, useSelector } from "react-redux";
-import { modifyQuantity, selectBudget, selectEditing, selectRemaining, setEditingMode } from "../states/itemSlice";
+import {
+    modifyQuantity,
+    selectBudget,
+    selectEditing,
+    selectRemaining,
+    setEditingMode
+} from "../states/itemSlice";
 
 /** Common functions/types */
 import { displayPopup, ItemProps } from "./common";
@@ -16,25 +22,24 @@ import RemoveItem from "./RemoveItem";
 import "./css/common.css";
 
 /**
- * 
+ *
  * @param item item object with props price and quantity
  * @param total total spent so far
  * @param budget current budget
  * @returns
  */
-const calculateMaxQuantity = (item: ItemInt, total:number, budget:number) => {
+const calculateMaxQuantity = (item: ItemInt, total: number, budget: number) => {
     let max;
     // If the total spent is 0, then the full budget can be used
     if (total === 0) {
         max = budget / item.price;
     } else {
         // Add the amount relating to the item to the remainder to determine total allowed
-        max = (total + (item.price * item.quantity))/item.price;
+        max = (total + item.price * item.quantity) / item.price;
     }
 
     return max;
-}
-
+};
 
 /**
  * Item component
@@ -70,7 +75,7 @@ const Item = ({ item }: ItemProps) => {
 
         if (tempValue > max) {
             setQuantityError(true);
-            setErrorMessage(`Only ${max} allowed`)
+            setErrorMessage(`Only ${max} allowed`);
             setEdit(false);
         } else {
             setEdit(true);
@@ -79,9 +84,7 @@ const Item = ({ item }: ItemProps) => {
 
         setQuantity(tempValue);
         setTotal(tempValue * item.price);
-
     };
-
 
     const submitQuantity = () => {
         let b;
@@ -94,7 +97,7 @@ const Item = ({ item }: ItemProps) => {
 
         dispatch(setEditingMode(b));
         setEdit(b);
-    }
+    };
 
     return (
         <tr className="py-3">
@@ -104,13 +107,15 @@ const Item = ({ item }: ItemProps) => {
             {/* Quantity input */}
             <td>
                 <div className={`input-group amount-input `}>
-                    <div className={`input-div ${ edit || (edit && !globalEditing) ? "" : "disabled-input"}`}>
+                    <div
+                        className={`input-div ${edit || (edit && !globalEditing) ? "" : "disabled-input"}`}
+                    >
                         <QuantityInput handleQuantity={handleQuantity} currentQuantity={quantity} />
                     </div>
                     <div className="input-group-prepend">
                         <button
                             type="button"
-                            className={`btn edit-btn ${(quantityError || (globalEditing && !edit)) ? "btn-secondary disabled" : "btn-success"}`}
+                            className={`btn edit-btn ${quantityError || (globalEditing && !edit) ? "btn-secondary disabled" : "btn-success"}`}
                             onClick={submitQuantity}
                         >
                             {`${edit ? "Editing" : "Edit"}`}
@@ -119,7 +124,10 @@ const Item = ({ item }: ItemProps) => {
                 </div>
 
                 {/* Simple popup for testing */}
-                <div className={`${displayPopup(quantityError)} error-warning`} style={{width:'200px'} }>
+                <div
+                    className={`${displayPopup(quantityError)} error-warning`}
+                    style={{ width: "200px" }}
+                >
                     <p>{errorMessage}</p>
                 </div>
             </td>
@@ -132,8 +140,8 @@ const Item = ({ item }: ItemProps) => {
                 {`\u00A3`} {total.toFixed(2)}
             </td>
             {/* Delete button */}
-            <td style={{paddingRight:'0px'} }>
-                <RemoveItem item={item} />
+            <td style={{ paddingRight: "0px" }}>
+                <RemoveItem item={item} editing={edit} />
             </td>
         </tr>
     );

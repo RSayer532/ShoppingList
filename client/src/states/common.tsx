@@ -28,5 +28,3 @@ export const calculateRemaining = (budget: number, itemList: ItemInt[]) => {
     let total = itemList.reduce((total, item) => total + item.price * item.quantity, 0);
     return budget - total;
 };
-
-
