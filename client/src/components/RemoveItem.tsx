@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import "./css/common.css";
 import { ItemInt } from "../common";
 
+// Definition of props type for RemoveItem component
 interface RemoveProps {
     item: ItemInt;
     editing: boolean;

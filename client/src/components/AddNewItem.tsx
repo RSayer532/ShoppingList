@@ -13,13 +13,19 @@ import { QuantityInput } from ".";
 /** Styles */
 import "./css/common.css";
 
+/** Variable types that are of type number */
+enum Value {
+    Price,
+    Quantity
+}
+
 /**
- * Component for adding a new item to the list
+ * Component for adding a new item to the list, including input for name, price, quantity, a total value and submit button
  */
 const AddNewItem = () => {
     // Component states
     const [itemName, setItemName] = useState("");
-    const [itemPrice, setItemPrice] = useState(0);
+    const [itemPrice, setItemPrice] = useState(NaN);
     const [itemQuantity, setItemQuantity] = useState(1);
     const [total, setTotal] = useState(0);
     const [submit, setSubmit] = useState(false);
@@ -35,7 +41,7 @@ const AddNewItem = () => {
 
     // Clear inputs of each element
     const clearInputs = () => {
-        setItemPrice(0);
+        setItemPrice(NaN);
         setTotal(0);
         setItemName("");
         setItemQuantity(1);
@@ -64,7 +70,7 @@ const AddNewItem = () => {
 
     // Event handler for item name input
     const handleName = (inputName: string) => {
-        //Check if already have item in the list;
+        //Check if already have item in the list and warn user;
         if (itemList.includes(inputName)) {
             setNameError(true);
         } else {
@@ -73,14 +79,9 @@ const AddNewItem = () => {
         setItemName(inputName);
     };
 
-    enum Value {
-        Price,
-        Quantity
-    }
-
-    // Handler function for input types
     /**
-     *
+     * An abstract handler function for handling inputs of type Value
+     * Checks are made to determine if the input type is valid and sets the appropriate states/errors
      * @param value Input value from HTML element
      * @param errorSetter setState action for the required error state
      * @param stateSetter setState action for the required state
@@ -93,9 +94,6 @@ const AddNewItem = () => {
     ) => {
         let tempValue = parseFloat(value);
 
-        // Get the value of the other quantity (price or quantity) for calculating the total price of items
-        let otherValue = valueType === Value.Price ? itemQuantity : itemPrice;
-
         // Check if the input is empty
         if (isNaN(tempValue)) {
             setTotal(0);
@@ -104,14 +102,17 @@ const AddNewItem = () => {
             return;
         }
 
-        // Check before calculating total that the price/quantity is not 0 as well
+        // Get the value of the other quantity (price or quantity) for calculating the total price of items
+        let otherValue = valueType === Value.Price ? itemQuantity : itemPrice;
+
+        // Check before calculating total that the other value, either price/quantity is not 0 as well
         if (isNaN(otherValue)) {
             setTotal(0);
         } else {
             setTotal(otherValue * tempValue);
         }
 
-        // Check if the the new total is within the remaining amount
+        // Check if the the new total is within the remaining amount and update state of budget error
         let inBudget = tempValue * otherValue < remaining;
         toggleState(inBudget, setBudgetError);
 
@@ -119,9 +120,11 @@ const AddNewItem = () => {
         errorSetter(false);
     };
 
-    // Specific implementations of above function
+    // Specific implementations of above function for handling the price input
     const handlePrice = (value: string) =>
         handleValue(value, Value.Price, setPriceError, setItemPrice);
+
+    // Specific implementations of above function for handling the quantity input
     const handleQuantity = (value: string) =>
         handleValue(value, Value.Quantity, setQuantityError, setItemQuantity);
 
@@ -171,7 +174,7 @@ const AddNewItem = () => {
                     </div>
                 </div>
 
-                {/* Input for quantity*/}
+                {/* Input for quantity */}
                 <div className="col">
                     <div className="input-group ">
                         <span className="input-group-text price-input ">Quantity:</span>
@@ -198,7 +201,7 @@ const AddNewItem = () => {
                             aria-label="Total"
                             aria-describedby="price-total"
                         >
-                            {total}
+                            {total.toFixed(2)}
                         </span>
                     </div>
                 </div>

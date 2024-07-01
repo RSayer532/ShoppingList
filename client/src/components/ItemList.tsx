@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Item } from ".";
 
 import { selectAllItems } from "../states/itemSlice";
 
 /**
- * Item list component
+ * Item list component, a table of all items in the global array
  */
 const ItemList = () => {
     const items = useSelector(selectAllItems);

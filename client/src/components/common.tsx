@@ -1,15 +1,7 @@
-import { ItemInt } from "../common";
-
-/** Common types/interfaces*/
-export interface ItemProps {
-    item: ItemInt;
-}
-
 /** Common values */
 export const poundSign = `\u00A3`;
 
 /** Common functions */
-
 // Return class name to hide element if error is true
 export const displayPopup = (error: boolean) => (error ? "visible" : "invisible");
 

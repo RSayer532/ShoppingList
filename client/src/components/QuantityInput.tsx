@@ -1,6 +1,7 @@
 import React from "react";
 import { checkNaN } from "./common";
 
+// Type definition for props of the QuantityInput component
 interface QuantityInputProps {
     handleQuantity: Function;
     currentQuantity: number;

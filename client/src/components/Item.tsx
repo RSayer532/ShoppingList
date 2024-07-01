@@ -11,7 +11,7 @@ import {
 } from "../states/itemSlice";
 
 /** Common functions/types */
-import { displayPopup, ItemProps } from "./common";
+import { displayPopup } from "./common";
 import { ItemInt } from "../common";
 
 /** Imported Components */
@@ -21,25 +21,10 @@ import RemoveItem from "./RemoveItem";
 /** Styles */
 import "./css/common.css";
 
-/**
- *
- * @param item item object with props price and quantity
- * @param total total spent so far
- * @param budget current budget
- * @returns
- */
-const calculateMaxQuantity = (item: ItemInt, total: number, budget: number) => {
-    let max;
-    // If the total spent is 0, then the full budget can be used
-    if (total === 0) {
-        max = budget / item.price;
-    } else {
-        // Add the amount relating to the item to the remainder to determine total allowed
-        max = (total + item.price * item.quantity) / item.price;
-    }
-
-    return max;
-};
+// Definition of props for Item component
+interface ItemProps {
+    item: ItemInt;
+}
 
 /**
  * Item component
@@ -57,6 +42,27 @@ const Item = ({ item }: ItemProps) => {
     const [quantityError, setQuantityError] = useState<boolean>(false);
     const [total, setTotal] = useState(item.quantity * item.price);
     const [errorMessage, setErrorMessage] = useState("");
+
+    /**
+     * Function for calculating the maximum number of an item, given the total spent on the other items in the list
+     * @param item item object with props price and quantity
+     * @param total total spent so far
+     * @param budget current budget
+     * @returns
+     */
+    const calculateMaxQuantity = (item: ItemInt, total: number, budget: number) => {
+        let max;
+        // If the total spent is 0, then the full budget can be used
+        if (total === 0) {
+            max = budget / item.price;
+        } else {
+            // The current total spent includes the old total of the item and
+            // therefore need to add this to the old remaining to find the maximum allowed
+            max = (total + item.price * item.quantity) / item.price;
+        }
+
+        return max;
+    };
 
     // Check whether the input quantity is valid, given the price and current remaining value and prevent user from submitting
     const handleQuantity = (value: string) => {
@@ -86,17 +92,20 @@ const Item = ({ item }: ItemProps) => {
         setTotal(tempValue * item.price);
     };
 
+    // Event handler for clicking submit button, updating the items quantity and total remaining
+    // if it is a valid submit. This also handles the global state of the editing mode, so that other
+    // items can be edited.
     const submitQuantity = () => {
-        let b;
+        let stillEditing;
         if (edit && !quantityError) {
-            b = false;
+            stillEditing = false;
             dispatch(modifyQuantity({ quantity: quantity, name: item.name }));
         } else {
-            b = true;
+            stillEditing = true;
         }
 
-        dispatch(setEditingMode(b));
-        setEdit(b);
+        dispatch(setEditingMode(stillEditing));
+        setEdit(stillEditing);
     };
 
     return (

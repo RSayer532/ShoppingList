@@ -2,9 +2,17 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 /** Interfaces/types */
-import { calculateRemaining, RootState, ItemPL, BudgetPL, QuantityPL, EditingPL } from "./common";
+import {
+    calculateRemaining,
+    RootState,
+    ItemPL,
+    BudgetPL,
+    QuantityPL,
+    EditingPL,
+    calculateTotalSpent
+} from "./common";
 
-import { ItemsState, calculateTotalSpent } from "../common";
+import { ItemsState } from "../common";
 
 // For testing purposes
 const initialState: ItemsState = {
