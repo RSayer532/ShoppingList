@@ -18,6 +18,7 @@ const ItemList = () => {
                     <th scope="col">Quantity</th>
                     <th scope="col">Price per item</th>
                     <th scope="col">Total</th>
+                    <th scope="col">In basket</th>
                     <th scope="col"></th>
                 </tr>
             </thead>

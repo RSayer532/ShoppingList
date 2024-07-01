@@ -11,7 +11,7 @@ import {
 } from "../states/itemSlice";
 
 /** Common functions/types */
-import { displayPopup } from "./common";
+import { displayPopup, toggleState } from "./common";
 import { ItemInt } from "../common";
 
 /** Imported Components */
@@ -42,6 +42,7 @@ const Item = ({ item }: ItemProps) => {
     const [quantityError, setQuantityError] = useState<boolean>(false);
     const [total, setTotal] = useState(item.quantity * item.price);
     const [errorMessage, setErrorMessage] = useState("");
+    const [itemChecked, setItemChecked] = useState(false);
 
     /**
      * Function for calculating the maximum number of an item, given the total spent on the other items in the list
@@ -108,10 +109,21 @@ const Item = ({ item }: ItemProps) => {
         setEdit(stillEditing);
     };
 
+    // Event handler to determine checked state and cross item off of list
+    const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let checked = event.target.checked;
+        toggleState(!checked, setItemChecked);
+    };
+
     return (
         <tr className="py-3">
             {/* Item name */}
-            <td>{item.name}</td>
+            <td
+                className={`${itemChecked ? "text-decoration-line-through" : ""}`}
+                style={{ float: "none" }}
+            >
+                {item.name}
+            </td>
 
             {/* Quantity input */}
             <td>
@@ -147,6 +159,17 @@ const Item = ({ item }: ItemProps) => {
             {/* Total price */}
             <td>
                 {`\u00A3`} {total.toFixed(2)}
+            </td>
+
+            <td>
+                <div className="form-check">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        onChange={handleCheck}
+                    />
+                </div>
             </td>
             {/* Delete button */}
             <td style={{ paddingRight: "0px" }}>
