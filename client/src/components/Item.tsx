@@ -160,14 +160,15 @@ const Item = ({ item }: ItemProps) => {
             <td>
                 {`\u00A3`} {total.toFixed(2)}
             </td>
-
+            {/* Added to basket checkbox */}
             <td>
-                <div className="form-check">
+                <div className="form-check" >
                     <input
                         className="form-check-input"
                         type="checkbox"
                         value=""
                         onChange={handleCheck}
+                        style={{ float: 'none' }}
                     />
                 </div>
             </td>
