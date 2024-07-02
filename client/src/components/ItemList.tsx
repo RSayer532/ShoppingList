@@ -1,33 +1,34 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { GroceryItem } from ".";
+import { Item } from ".";
 
-import { selectAllGroceries } from "../states/grocerySlice";
+import { selectAllItems } from "../states/itemSlice";
 
 /**
- * Grocery list component
+ * Item list component, a table of all items in the global array
  */
-const GroceryList = () => {
-    const groceries = useSelector(selectAllGroceries);
+const ItemList = () => {
+    const items = useSelector(selectAllItems);
 
     return (
-        <table className="table" style={{ width: "90%", margin: "auto" }}>
+        <table className="table text-center">
             <thead className="thead">
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Price per item</th>
                     <th scope="col">Total</th>
+                    <th scope="col">In basket</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                {groceries.map((grocery) => (
-                    <GroceryItem grocery={grocery} key={grocery.name} />
+                {items.map((item) => (
+                    <Item item={item} />
                 ))}
             </tbody>
         </table>
     );
 };
 
-export default GroceryList;
+export default ItemList;

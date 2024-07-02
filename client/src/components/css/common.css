@@ -1,0 +1,32 @@
+.amount-input {
+    width: 200px;
+    margin: auto;
+}
+
+.input-div {
+    width: 100px;
+}
+
+.edit-btn {
+    width: 100px;
+}
+
+#app-container {
+    width: 90%;
+    margin: auto;
+}
+
+.action-btn {
+    float: right;
+    width: 100px;
+}
+
+.error-warning {
+    background-color: orange;
+    margin: 5px;
+    text-align: center;
+}
+
+.disabled-input {
+    pointer-events: none;
+}

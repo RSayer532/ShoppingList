@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-import { GroceryList, Budget, Remaining, TotalSpent, AddNewItem } from "./components";
+import { ItemList, Budget, Remaining, TotalSpent, AddNewItem } from "./components";
 
 import { Provider } from "react-redux";
 import { store } from "./states/store";
@@ -15,8 +15,8 @@ const App = () => {
                     <h1 className="mt-3">My Groceries</h1>
                 </div>
             </nav>
-            <div className="container">
-                <div className="row mt-4">
+            <div className="container" style={{ width: "90%", margin: "auto" }}>
+                <div className="row mt-3">
                     {
                         <div className="col">
                             <Budget />
@@ -35,13 +35,13 @@ const App = () => {
                         </div>
                     }
                 </div>
-                <div className="row mt-4 justify-content-center">
+                <div className="row mb-3 justify-content-center">
                     <div className="col">
-                        <GroceryList />
+                        <ItemList />
                     </div>
                 </div>
-                <div className="row mt-3">
-                    <h2 className="mt-3">Add an item</h2>
+                <div className="row">
+                    <h2 className="mb-3">Add an item</h2>
                     {<AddNewItem />}
                 </div>
             </div>

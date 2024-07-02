@@ -1,6 +1,11 @@
 import React from "react";
-import { selectRemaining } from "../states/grocerySlice";
+
+// Redux
+import { selectRemaining } from "../states/itemSlice";
 import { useSelector } from "react-redux";
+
+// Common imports
+import { poundSign } from "./common";
 
 const Remaining = () => {
     // Global states
@@ -9,15 +14,14 @@ const Remaining = () => {
     return (
         <div className={`input-group mb-3`}>
             <span className="input-group-text" id="remaining">
-                Remaining:
+                Remaining ({poundSign}):
             </span>
             <span
-                type="number"
                 className="form-control disable"
                 aria-label="Remaining"
                 aria-describedby="remaining"
             >
-                {remaining}
+                {remaining.toFixed(2)}
             </span>
         </div>
     );
