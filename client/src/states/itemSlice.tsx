@@ -12,24 +12,13 @@ import {
     calculateTotalSpent
 } from "./common";
 
-import { ItemsState } from "../common";
+import { ItemInt, ItemsState } from "../common";
 
 // For testing purposes
 const initialState: ItemsState = {
-    budget: 100,
-    remaining: 100 - (0.5 * 2 + 1 * 5),
-    items: [
-        {
-            name: "Banana",
-            price: 0.5,
-            quantity: 2
-        },
-        {
-            name: "Apples",
-            price: 1.0,
-            quantity: 5
-        }
-    ],
+    budget: 30,
+    remaining: 30,
+    items: [],
     inEditingMode: false
 };
 
@@ -96,6 +85,6 @@ export const selectEditing = (state: RootState) => state.groceries.inEditingMode
 
 // Memoized selector functions
 export const selectExistingItems = createSelector([selectAllItems], (items) =>
-    items.map((item) => item.name)
+    items.map((item:ItemInt) => item.name)
 );
 export const selectExistingTotal = createSelector([selectAllItems], calculateTotalSpent);

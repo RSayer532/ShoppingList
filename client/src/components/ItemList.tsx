@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Item } from ".";
 
 import { selectAllItems } from "../states/itemSlice";
+import { ItemInt } from "../common";
 
 /**
  * Item list component, a table of all items in the global array
@@ -23,7 +24,7 @@ const ItemList = () => {
                 </tr>
             </thead>
             <tbody>
-                {items.map((item) => (
+                {items.map((item:ItemInt) => (
                     <Item item={item} />
                 ))}
             </tbody>

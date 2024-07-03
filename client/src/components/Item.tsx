@@ -62,7 +62,7 @@ const Item = ({ item }: ItemProps) => {
             max = (total + item.price * item.quantity) / item.price;
         }
 
-        return max;
+        return Math.floor(max);
     };
 
     // Check whether the input quantity is valid, given the price and current remaining value and prevent user from submitting
@@ -160,14 +160,15 @@ const Item = ({ item }: ItemProps) => {
             <td>
                 {`\u00A3`} {total.toFixed(2)}
             </td>
-
+            {/* Added to basket checkbox */}
             <td>
-                <div className="form-check">
+                <div className="form-check" >
                     <input
                         className="form-check-input"
                         type="checkbox"
                         value=""
                         onChange={handleCheck}
+                        style={{ float: 'none' }}
                     />
                 </div>
             </td>
