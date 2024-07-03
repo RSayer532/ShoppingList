@@ -62,7 +62,7 @@ const Item = ({ item }: ItemProps) => {
             max = (total + item.price * item.quantity) / item.price;
         }
 
-        return max;
+        return Math.floor(max);
     };
 
     // Check whether the input quantity is valid, given the price and current remaining value and prevent user from submitting
